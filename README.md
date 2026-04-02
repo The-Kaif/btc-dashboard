@@ -3,6 +3,10 @@
 A modern, real-time Bitcoin (BTC/USDT) dashboard built using Next.js and the Bybit WebSocket API.  
 Designed with a professional trading UI, live market updates, and light/dark theme support.
 
+## 🌐 Live Demo
+
+👉 https://btc-dashboard-mohd-kaifs-projects.vercel.app/
+
 ---
 
 ## ✨ Features
