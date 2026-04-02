@@ -5,7 +5,7 @@ Designed with a professional trading UI, live market updates, and light/dark the
 
 ## 🌐 Live Demo
 
-👉 https://btc-dashboard-mohd-kaifs-projects.vercel.app/
+👉 https://btc-dashboard-lovat.vercel.app/
 
 ---
 
