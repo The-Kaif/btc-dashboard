@@ -1,65 +1,156 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useWebSocket } from "./hooks/useWebSocket";
+import Chart from "./components/Chart";
+import Sparkline from "./components/Sparkline";
+import Navbar from "./components/Navbar";
+import HeroPrice from "./components/HeroPrice";
+import StatCardPro from "./components/StatCardPro";
+import { formatNumber } from "./utils/format";
 
 export default function Home() {
+  // WebSocket hook state
+  const { data, status, history } = useWebSocket();
+
+  //  Theme state
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  // Helper boolean for cleaner conditional classes
+  const isDark = theme === "dark";
+
+  const [prevPrice, setPrevPrice] = useState<number | null>(null);
+
+  const currentPrice = Number(data.lastPrice || data.markPrice || 0);
+
+  // compare price
+  const isUp = prevPrice !== null ? currentPrice > prevPrice : undefined;
+
+  // update previous price AFTER render
+  useEffect(() => {
+    if (currentPrice) {
+      const timer = setTimeout(() => {
+        setPrevPrice(currentPrice);
+      }, 200); // delay for animation
+
+      return () => clearTimeout(timer);
+    }
+  }, [currentPrice]);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    //  Root container with dynamic theme styles
+    <div
+      className={`min-h-screen transition-all ${
+        isDark ? "bg-[#0f1117] text-white" : "bg-gray-100 text-black"
+      }`}
+    >
+      {/*  Centered layout container */}
+      <div className="max-w-[1400px] mx-auto">
+        <div
+          className={`min-h-screen mb-5 ${
+            isDark ? "bg-[#0f1117]" : "bg-gray-100"
+          }`}
+        >
+          {/* Navbar */}
+          <Navbar
+            theme={theme}
+            setTheme={setTheme}
+            status={status}
+            isDark={isDark}
+          />
+
+          {/* Hero section */}
+          <HeroPrice
+            price={currentPrice}
+            change={Number(data.price24hPcnt || 0) * 100}
+            isDark={isDark}
+            isUp={isUp}
+          />
+
+          {/* Stats cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 px-4 sm:px-6">
+            <StatCardPro
+              title="Mark Price"
+              value={formatNumber(data.markPrice) || "-"}
+              color="blue"
+              isDark={isDark}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+            <StatCardPro
+              title="24h High"
+              value={formatNumber(data.highPrice24h) || "-"}
+              color="green"
+              isDark={isDark}
+            />
+
+            <StatCardPro
+              title="24h Low"
+              value={formatNumber(data.lowPrice24h) || "-"}
+              color="red"
+              isDark={isDark}
+            />
+
+            <StatCardPro
+              title="Volume"
+              value={formatNumber(data.turnover24h) || "-"}
+              color="orange"
+              isDark={isDark}
+            />
+
+            <StatCardPro
+              title="24h Change"
+              value={
+                data.price24hPcnt
+                  ? (Number(data.price24hPcnt) * 100).toFixed(2) + "%"
+                  : "-"
+              }
+              color="green"
+              isDark={isDark}
+            />
+          </div>
+
+          {/* TradingView Chart */}
+          <div className="px-6 mt-6">
+            <div
+              className={`p-4 rounded-xl border ${
+                isDark ? "bg-[#161a23]" : "bg-white"
+              }`}
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-sm text-gray-400">BTC/USDT</h2>
+              </div>
+
+              {/* External TradingView widget */}
+              <Chart theme={theme} />
+            </div>
+          </div>
+
+          {/* Sparkline (last 60 ticks price trend) */}
+          <div className="px-6 mt-6">
+            <div
+              className={`p-4 rounded-xl border ${
+                isDark ? "bg-[#161a23]" : "bg-white"
+              }`}
+            >
+              {/* Header */}
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-sm text-gray-400">
+                  BTC Price Trend · Last 60 Seconds
+                </h2>
+              </div>
+
+              {/* Mini chart */}
+              <div
+                className={`p-4 rounded-xl ${
+                  isDark ? "bg-[#161a23]" : "bg-white"
+                }`}
+              >
+                <Sparkline data={history} />
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
