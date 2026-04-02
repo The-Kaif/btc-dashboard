@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 CryptoFlow — Real-Time BTC/USDT Dashboard
 
-## Getting Started
+A modern, real-time Bitcoin (BTC/USDT) dashboard built using Next.js and the Bybit WebSocket API.  
+Designed with a professional trading UI, live market updates, and light/dark theme support.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 🔴 **Real-time data (WebSocket)**  
+  - Live BTC price updates via Bybit API  
+  - Auto-reconnect on connection drop  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 📊 **Market Stats**  
+  - Last traded price  
+  - Mark price  
+  - 24h High / Low  
+  - 24h Volume  
+  - 24h % Change  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- 📈 **TradingView Chart**  
+  - Advanced BTC/USDT chart  
+  - Syncs with light/dark mode  
 
-## Learn More
+- 🌗 **Light / Dark Mode**  
+  - Fully theme-aware UI  
+  - Consistent across all components  
 
-To learn more about Next.js, take a look at the following resources:
+- 📉 **Sparkline (Last 60 ticks)**  
+  - Live price trend visualization  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- 🟢🔴 **Price Highlighting**  
+  - Dynamic color + arrow based on price movement  
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 📱 **Responsive Design**  
+  - Works across desktop and mobile devices  
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠 Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework:** Next.js (App Router)  
+- **Language:** TypeScript  
+- **Styling:** Tailwind CSS  
+- **Charts:** TradingView Widget, Recharts  
+- **Data Source:** Bybit WebSocket API  
+
+---
+
+## 🔌 WebSocket Endpoint
+
+wss://stream.bybit.com/v5/public/linear  
+
+**Subscribed topic:** tickers.BTCUSDT  
+
+---
+
+## 🚀 Getting Started
+
+### 1. Install dependencies  
+npm install  
+
+### 2. Run development server  
+npm run dev  
+
+### 3. Open in browser  
+http://localhost:3000  
+
+---
+
+## 📂 Project Structure
+
+app/  
+ ├── components/  
+ │   ├── Navbar.tsx  
+ │   ├── HeroPrice.tsx  
+ │   ├── StatCardPro.tsx  
+ │   ├── Chart.tsx  
+ │   ├── Sparkline.tsx  
+ │  
+ ├── hooks/  
+ │   └── useWebSocket.ts  
+ │  
+ ├── utils/  
+ │   └── format.ts  
+ │  
+ └── page.tsx  
+
+---
+
+## 🎯 Key Highlights
+
+- Real-time WebSocket data handling  
+- Auto reconnect mechanism  
+- Clean and scalable component architecture  
+- Professional trading dashboard UI  
+- Fully responsive + theme support  
+
+---
+
+## 📦 Deployment
+
+npm run build  
+npm start  
+
+Or deploy easily using Vercel.
+
+---
+
+## 🙌 Acknowledgements
+
+- Bybit API  
+- TradingView Widgets  
+- Next.js  
+
+---
+
+## 📌 Author
+
+**Mohd Kaif**  
+Frontend Developer (React / Next.js)  
